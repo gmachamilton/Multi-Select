@@ -1,0 +1,8 @@
+var dados = '<option>Ketchup</option> <option>Relish</option> <option>Mustard</option>'
+
+var completo = '<select class="selectpicker" multiple data-live-search="true" id ="selectpicker">' + dados +'</select>';
+
+var local = document.getElementById("demo");
+local.insertAdjacentHTML('beforeend', completo);
+
+$('#selectpicker').selectpicker();
