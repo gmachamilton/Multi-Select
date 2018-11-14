@@ -6,6 +6,10 @@ var local = document.getElementById("demo");
 local.insertAdjacentHTML('beforeend', completo);
 
 $('#selectpicker').selectpicker();
+$('.selectpicker').on('changed.bs.select', function (e, clickedIndex, newValue, oldValue) {
+    var selected = $(e.currentTarget).val();
+    Dashboards.fireChange("param_municipio", selected)
+});
 
 function toggleSelectAll(control) {
     var allOptionIsSelected = (control.val() || []).indexOf("All") > -1;
