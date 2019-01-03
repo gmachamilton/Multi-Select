@@ -1,47 +1,29 @@
-var dados = '<option>Ketchup</option> <option>Relish</option> <option>Mustard</option>'
-
-var completo = '<select class="selectpicker" multiple data-live-search="true" id ="selectpicker"> <option value="All">Selecionar todos</option>' + dados +'</select>';
-
-var local = document.getElementById("demo");
-local.insertAdjacentHTML('beforeend', completo);
-
-$('#selectpicker').selectpicker();
-$('.selectpicker').on('changed.bs.select', function (e, clickedIndex, newValue, oldValue) {
-    var selected = $(e.currentTarget).val();
-    Dashboards.fireChange("param_municipio", selected)
-});
-
-function toggleSelectAll(control) {
-    var allOptionIsSelected = (control.val() || []).indexOf("All") > -1;
-    function valuesOf(elements) {
-        return $.map(elements, function(element) {
-            return element.value;
+ function a(){               
+        var optiones = '';//Alterar aqui
+        var x = 0;
+        while(x < situacoes.length){//Alterar aqui
+            var situacao = situacoes[x][0]; //Alterar aqui
+            situacao = "<option>"+situacao+"</option>";//Alterar aqui
+            optiones+=situacao;//Alterar aqui
+            
+            x+=1;
+        }       
+        var completo = '<select class="selectpicker" multiple data-live-search="true" multiple title="Nenhum selecionado"><option value="All">Selecionar todos</option>' + optiones+ '</select>'; //Alterar aqui
+        var local = document.getElementById("multiSelectImovelSituacao"); //Alterar aqui
+        local.insertAdjacentHTML('beforeend', completo);
+        
+         $('.selectpicker').selectpicker().change(function(){toggleSelectAll($(this));}).trigger('change');
+         $('.selectpicker').on('changed.bs.select', function (e, clickedIndex, newValue, oldValue) {
+            var selected = $(e.currentTarget).val();
+            var selecionado = '';
+            if(selected === null){
+                selecionado = '';
+                Dashboards.setParameter("imovelSituacao", selecionado)} //Alterar aqui
+                
+            else{
+                if(selected[0]=='All'){selected.shift()} 
+                console.log(selected);
+                selecionado = selected.join(",");
+                Dashboards.setParameter("imovelSituacao", selecionado);} //Alterar aqui
         });
-    }
-
-    if (control.data('allOptionIsSelected') != allOptionIsSelected) {
-        // User clicked 'All' option
-        if (allOptionIsSelected) {
-            // Can't use .selectpicker('selectAll') because multiple "change" events will be triggered
-            control.selectpicker('val', valuesOf(control.find('option')));
-        } else {
-            control.selectpicker('val', []);
-        }
-    } else {
-        // User clicked other option
-        if (allOptionIsSelected && control.val().length != control.find('option').length) {
-            // All options were selected, user deselected one option
-            // => unselect 'All' option
-            control.selectpicker('val', valuesOf(control.find('option:selected[value!=All]')));
-            allOptionIsSelected = false;
-        } else if (!allOptionIsSelected && control.val().length == control.find('option').length - 1) {
-            // Not all options were selected, user selected all options except 'All' option
-            // => select 'All' option too
-            control.selectpicker('val', valuesOf(control.find('option')));
-            allOptionIsSelected = true;
-        }
-    }
-    control.data('allOptionIsSelected', allOptionIsSelected);
-}
-
-$('#selectpicker').selectpicker().change(function(){toggleSelectAll($(this));}).trigger('change');
+} 
